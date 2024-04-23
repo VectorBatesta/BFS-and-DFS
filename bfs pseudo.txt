@@ -1,0 +1,38 @@
+----------------
+como fazer:
+-----------------
+
+def BFS(inicial):
+    ABERTOS = [Inicial] #é uma Fila
+    FECHADOS = [ ]
+
+    Enquanto ABERTOS != [ ] faça:
+        Remova o estado mais à esquerda de ABERTOS, chame-o de X
+        Se X for um objetivo:
+            retornar SUCESSO
+        Senão
+            Gere filhos de X
+            Coloque X em FECHADOS
+            Descarte filhos de X que já estão em ABERTOS ou FECHADOS
+            #Evita ciclos ou loops
+            Coloque os filhos que restam no final à direita de ABERTOS
+            #enfileirar os estados na Fila
+    Retorna FALHA #não restam mais estados
+
+def DFS(inicial):
+    ABERTOS = [Inicial] #é uma Pilha
+    FECHADOS = [ ]
+    Enquanto ABERTOS != [ ] faça:
+        Remova o estado mais à esquerda de ABERTOS, chame-o de X
+        Se X for um objetivo:
+            retornar SUCESSO
+        Senão
+            Gere filhos de X
+            Coloque X em FECHADOS
+            Descarte filhos de X que já estão em ABERTOS ou FECHADOS
+            # Evita ciclos ou loops
+            Coloque os filhos que restam no final à esquerda de ABERTOS
+            #empilhar os estados na Fila
+    Retorna FALHA #não restam mais estados
+
+
