@@ -25,7 +25,8 @@ def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
         if nodeAtual == nodeProcurar:
             return 'achou'
         
-        fila.append(nodeAtual.filhos)
+        if nodeAtual.filhos != []:
+            fila.append(nodeAtual.filhos)
 
     return 0 #nao achou
 
@@ -43,9 +44,9 @@ def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
         if nodeAtual == nodeProcurar:
             return 'achou'
         
-        pilha.append(nodeAtual.filhos)
+        if nodeAtual.filhos != []:
+            pilha.append(nodeAtual.filhos)
 
-    return 'achou'
     return 0 #nao achou
 
 
@@ -53,13 +54,15 @@ def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
 def gerar_filhos(nodePai: nodeState, raiz: nodeState):
     adicionarFilhos = [] #checa depois se há repetido
 
+    posicao = -1
     #acha a posicao do zero pra fazer trocas
     for i in range(9):
         if nodePai.matriz[i] == 0:
             posicao = i
             break
-        else:
-            exit("caceta cade o zero")
+        
+    if posicao == -1:
+        exit(f'caceta cade o zero: {nodePai.matriz}')
 
     #[XX ]
     #[XX ]
@@ -125,25 +128,29 @@ def gerar_filhos(nodePai: nodeState, raiz: nodeState):
         
 
 
-def algoritmoDFS(raiz):
+def algoritmoDFS(raiz: nodeState, objetivo = nodeState):
     pilha = []
+    nodeAtual = raiz
 
-    while procuraDFS(raiz, objetivo) == 0:
-        gerar_filhos(raiz)
-        pilha.append(raiz.filhos)
-        raiz = fila.pop() #() = ultimo valor colocado, portanto pilha
-
-
-
-def algoritmoBFS(raiz):
-    fila = []
-
-    while procuraBFS(raiz, objetivo) == 0:
-        gerar_filhos(raiz)
-        fila.append(raiz.filhos)
-        raiz = fila.pop(0) #(0) = primeiro valor colocado, portanto fila
+    while procuraDFS(nodeAtual, objetivo) == 0:
+        gerar_filhos(nodeAtual, raiz)
+        pilha.append(nodeAtual.filhos)
+        nodeAtual = pilha.pop() #() = ultimo valor colocado, portanto pilha
         
-    print(f'\nachei! node: {raiz.matriz}')
+    print(f'\nachei! node: {nodeAtual.matriz}')
+
+
+
+def algoritmoBFS(raiz: nodeState, objetivo = nodeState):
+    fila = []
+    nodeAtual = raiz
+
+    while procuraBFS(nodeAtual, objetivo) == 0:
+        gerar_filhos(nodeAtual, raiz)
+        fila.append(nodeAtual.filhos)
+        nodeAtual = fila.pop(0) #(0) = primeiro valor colocado, portanto fila
+        
+    print(f'\nachei! node: {nodeAtual.matriz}')
     
     
     
@@ -151,8 +158,8 @@ def algoritmoBFS(raiz):
 
 if __name__ == "__main__":
     #0 = vazio
-    raiz = nodeState([1, 2, 4, 3, 0, 5, 6, 7, 8])
-    objetivo =       [1, 2, 3, 4, 5, 6, 7, 8, 0]
+    raiz =     nodeState([1, 2, 4, 3, 0, 5, 6, 7, 8])
+    objetivo = nodeState([1, 2, 3, 4, 5, 6, 7, 8, 0])
 
     match escolhaProcura:
         case 'bfs':
