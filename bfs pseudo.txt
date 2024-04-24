@@ -11,7 +11,7 @@ def BFS(inicial):
         Se X for um objetivo:
             retornar SUCESSO
         Senão
-            Gere filhos de X
+            ListaFilhos = GerarFilhos(X) 
             Coloque X em FECHADOS
             Descarte filhos de X que já estão em ABERTOS ou FECHADOS
             #Evita ciclos ou loops

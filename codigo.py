@@ -1,4 +1,4 @@
-
+import copy
 
 #bfs ou dfs
 escolhaProcura = 'dfs'
@@ -7,10 +7,13 @@ escolhaProcura = 'dfs'
 
 
 class nodeState:
-    def __init__(self, matriz):
+    def __init__(self, matriz, pai = None):
         self.matriz = matriz
-        self.filhos = []
-
+        #self.filhos = []
+        self.pai = pai
+        # movimento
+        # nivel
+        # ...
 
 
 def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
@@ -20,7 +23,7 @@ def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
 
     #percorre até acabar
     while fila != []:
-        nodeAtual = fila.pop(0)
+        nodeAtual = copy.deepcopy(fila.pop(0))
 
         if nodeAtual == nodeProcurar:
             return 'achou'
@@ -39,11 +42,14 @@ def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
     
     #percorre até acabar
     while pilha != []:
-        nodeAtual = pilha.pop()
+        print(f'pilha: {pilha}\n')
+        nodeAtual = copy.deepcopy(pilha.pop())
+        print(f'nodeAtual: {nodeAtual}\n')
 
         if nodeAtual == nodeProcurar:
             return 'achou'
         
+        print(nodeAtual.filhos)
         if nodeAtual.filhos != []:
             pilha.append(nodeAtual.filhos)
 
@@ -69,41 +75,47 @@ def gerar_filhos(nodePai: nodeState, raiz: nodeState):
     #[XX ]
     #troca direita
     if posicao in (0, 1, 3, 4, 6, 7):
-        novoFilho = nodePai
+        novoFilho = copy.deepcopy(nodePai)
         novoFilho.matriz[posicao] = novoFilho.matriz[posicao + 1]
         novoFilho.matriz[posicao + 1] = 0
         adicionarFilhos.append(novoFilho)
+        # print(novoFilho.matriz)
 
     #[ XX]
     #[ XX]
     #[ XX]
     #troca esquerda
     if posicao in (1, 2, 4, 5, 7, 8):
-        novoFilho = nodePai
+        novoFilho = copy.deepcopy(nodePai)
         novoFilho.matriz[posicao] = novoFilho.matriz[posicao - 1]
         novoFilho.matriz[posicao - 1] = 0
         adicionarFilhos.append(novoFilho)
+        # print(novoFilho.matriz)
 
     #[XXX]
     #[XXX]
     #[   ]
     #troca baixo
     if posicao in (0, 1, 2, 3, 4, 5):
-        novoFilho = nodePai
+        novoFilho = copy.deepcopy(nodePai)
         novoFilho.matriz[posicao] = novoFilho.matriz[posicao + 3]
         novoFilho.matriz[posicao + 3] = 0
         adicionarFilhos.append(novoFilho)
+        # print(novoFilho.matriz)
 
     #[   ]
     #[XXX]
     #[XXX]
     #troca cima
     if posicao in (3, 4, 5, 6, 7, 8):
-        novoFilho = nodePai
+        novoFilho = copy.deepcopy(nodePai)
         novoFilho.matriz[posicao] = novoFilho.matriz[posicao - 3]
         novoFilho.matriz[posicao - 3] = 0
         adicionarFilhos.append(novoFilho)
+        # print(novoFilho.matriz)
 
+
+    ##############
 
     while adicionarFilhos != []:
         proxFilho = adicionarFilhos.pop()
@@ -130,7 +142,7 @@ def gerar_filhos(nodePai: nodeState, raiz: nodeState):
 
 def algoritmoDFS(raiz: nodeState, objetivo = nodeState):
     pilha = []
-    nodeAtual = raiz
+    nodeAtual = copy.deepcopy(raiz)
 
     while procuraDFS(nodeAtual, objetivo) == 0:
         gerar_filhos(nodeAtual, raiz)
@@ -143,7 +155,7 @@ def algoritmoDFS(raiz: nodeState, objetivo = nodeState):
 
 def algoritmoBFS(raiz: nodeState, objetivo = nodeState):
     fila = []
-    nodeAtual = raiz
+    nodeAtual = copy.deepcopy(raiz)
 
     while procuraBFS(nodeAtual, objetivo) == 0:
         gerar_filhos(nodeAtual, raiz)
