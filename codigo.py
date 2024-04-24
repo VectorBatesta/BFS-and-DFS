@@ -32,7 +32,19 @@ def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
 
 
 def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
+    pilha = [] #pilha de nodes
     
+    pilha.append(raiz)
+    
+    #percorre até acabar
+    while pilha != []:
+        nodeAtual = pilha.pop()
+
+        if nodeAtual == nodeProcurar:
+            return 'achou'
+        
+        pilha.append(nodeAtual.filhos)
+
     return 'achou'
     return 0 #nao achou
 
@@ -116,18 +128,25 @@ def gerar_filhos(nodePai: nodeState, raiz: nodeState):
 def algoritmoDFS(raiz):
     pilha = []
 
-    while procuraDFS(raiz) == 0:
-        return
-        
-
+    while procuraDFS(raiz, objetivo) == 0:
+        gerar_filhos(raiz)
+        pilha.append(raiz.filhos)
+        raiz = fila.pop() #() = ultimo valor colocado, portanto pilha
 
 
 
 def algoritmoBFS(raiz):
     fila = []
 
-    while procuraBFS(raiz) == 0:
-        return
+    while procuraBFS(raiz, objetivo) == 0:
+        gerar_filhos(raiz)
+        fila.append(raiz.filhos)
+        raiz = fila.pop(0) #(0) = primeiro valor colocado, portanto fila
+        
+    print(f'\nachei! node: {raiz.matriz}')
+    
+    
+    
     
 
 if __name__ == "__main__":
@@ -137,8 +156,6 @@ if __name__ == "__main__":
 
     match escolhaProcura:
         case 'bfs':
-            algoritmoBFS(raiz)
+            algoritmoBFS(raiz, objetivo)
         case 'dfs':
-            algoritmoDFS(raiz)
-    
-
+            algoritmoDFS(raiz, objetivo)
