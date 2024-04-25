@@ -127,7 +127,7 @@ def printanode(X: nodeState):
 
 
 
-def BFS(raiz: nodeState, objetivo):
+def BFS(raiz: nodeState, objetivo, nivelMax):
     ABERTOS = [raiz] #é uma pilha
     FECHADOS = []
 
@@ -137,24 +137,28 @@ def BFS(raiz: nodeState, objetivo):
         printanode(X)
         
         if X.matriz == objetivo:
-            return 'SUCESSO'
+            return 'SUCESSO', X
         else:
-            if X.nivel <= 10:
+            if X.nivel < nivelMax:
                 ListaFilhos = gerar_filhos(X)
                 FECHADOS.append(X)
                 
                 for node in ListaFilhos:
-                    if node in ABERTOS or node in FECHADOS:
-                        ListaFilhos.remove(node) #evita ciclos ou loops
+                    for nodeaberto in ABERTOS:
+                        if node.matriz == nodeaberto.matriz:
+                            ListaFilhos.remove(node) #evita ciclos ou loops
+                    for nodefechado in FECHADOS:
+                        if node.matriz == nodefechado.matriz:
+                            ListaFilhos.remove(node) #evita ciclos ou loops
                         
                 for node in ListaFilhos:
                     ABERTOS.append(node) #enfileirar os estados na Fila
             else:
                 break
-    return 'FALHA' #não restam mais estados
+    return 'FALHA', None #não restam mais estados
 
 
-def DFS(raiz: nodeState, objetivo):
+def DFS(raiz: nodeState, objetivo, nivelMax):
     ABERTOS = [raiz] #é uma pilha
     FECHADOS = []
     
@@ -164,21 +168,25 @@ def DFS(raiz: nodeState, objetivo):
         printanode(X)
         
         if X.matriz == objetivo:
-            return 'SUCESSO'
+            return 'SUCESSO', X
         else:
-            if X.nivel <= 10:
+            if X.nivel < nivelMax:
                 ListaFilhos = gerar_filhos(X)
                 FECHADOS.append(X)
                 
                 for node in ListaFilhos:
-                    if node in ABERTOS or node in FECHADOS:
-                        ListaFilhos.remove(node) #evita ciclos ou loops
+                    for nodeaberto in ABERTOS:
+                        if node.matriz == nodeaberto.matriz:
+                            ListaFilhos.remove(node) #evita ciclos ou loops
+                    for nodefechado in FECHADOS:
+                        if node.matriz == nodefechado.matriz:
+                            ListaFilhos.remove(node) #evita ciclos ou loops
                 
                 for node in ListaFilhos:
                     ABERTOS.append(node) #enfileirar os estados na Fila
             else:
-                break
-    return 'FALHA' #não restam mais estados
+                FECHADOS.append(X)
+    return 'FALHA', None #não restam mais estados
 
 
 
@@ -192,8 +200,36 @@ if __name__ == "__main__":
     raiz = nodeState([1, 2, 3, 4, 5, 6, 7, 0, 8])
     matrizObjetivo = [1, 2, 3, 4, 5, 6, 7, 8, 0]
     
-    match 'bfs':
-        case 'bfs':
-            print(BFS(raiz, matrizObjetivo))
-        case 'dfs':
-            print(DFS(raiz, matrizObjetivo))
+    nivelMax = -1
+    escolha = -1
+    
+    print(f'Quantidade máxima de níveis: ', end='')
+    nivelMax = int(input())
+    
+    if nivelMax < 1:
+        exit("maior q zero pls!")
+    
+    print(f'1-DFS, 2-BFS?: ', end='')
+    escolha = int(input())
+    
+    
+    match escolha:
+        case 2:
+            resultado, filhoFinal = BFS(raiz, matrizObjetivo, nivelMax)
+        case 1:
+            resultado, filhoFinal = DFS(raiz, matrizObjetivo, nivelMax)
+        case _:
+            exit("1 ou 2 pls!")
+            
+    print(f'{resultado}!')
+    if resultado == 'SUCESSO':
+        print(f' nível achado: {filhoFinal.nivel}, printando caminho:\n ')
+    
+    movimentos = []
+    while filhoFinal.pai != None:
+        movimentos.append(filhoFinal.movimento)
+        filhoFinal = filhoFinal.pai
+    
+    for i in reversed(range(len(movimentos))):
+        print(f'{movimentos[i]} ')
+    
