@@ -7,15 +7,16 @@ escolhaProcura = 'dfs'
 
 
 class nodeState:
-    def __init__(self, matriz, pai = None):
+    def __init__(self, matriz, pai = None, movimento = None, nivel = 0):
         self.matriz = matriz
         #self.filhos = []
         self.pai = pai
-        # movimento
-        # nivel
+        self.movimento = movimento
+        self.nivel = nivel
         # ...
 
 
+"""
 def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
     fila = [] #fila de nodes
 
@@ -32,8 +33,6 @@ def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
             fila.append(nodeAtual.filhos)
 
     return 0 #nao achou
-
-
 
 def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
     pilha = [] #pilha de nodes
@@ -54,7 +53,7 @@ def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
             pilha.append(nodeAtual.filhos)
 
     return 0 #nao achou
-
+"""
 
 
 def gerar_filhos(nodePai: nodeState, raiz: nodeState):
@@ -137,9 +136,60 @@ def gerar_filhos(nodePai: nodeState, raiz: nodeState):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
 
-
+"""
 def algoritmoDFS(raiz: nodeState, objetivo = nodeState):
     pilha = []
     nodeAtual = copy.deepcopy(raiz)
@@ -163,7 +213,7 @@ def algoritmoBFS(raiz: nodeState, objetivo = nodeState):
         nodeAtual = fila.pop(0) #(0) = primeiro valor colocado, portanto fila
         
     print(f'\nachei! node: {nodeAtual.matriz}')
-    
+""" 
     
     
     
