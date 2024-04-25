@@ -1,59 +1,17 @@
 import copy
 
-#bfs ou dfs
-escolhaProcura = 'dfs'
-
-
 
 
 class nodeState:
     def __init__(self, matriz, pai = None, movimento = None, nivel = 0):
         self.matriz = matriz
-        #self.filhos = []
+        self.filhos = []
         self.pai = pai
         self.movimento = movimento
         self.nivel = nivel
         # ...
-
-
-"""
-def procuraBFS(raiz: nodeState, nodeProcurar: nodeState):
-    fila = [] #fila de nodes
-
-    fila.append(raiz)
-
-    #percorre até acabar
-    while fila != []:
-        nodeAtual = copy.deepcopy(fila.pop(0))
-
-        if nodeAtual == nodeProcurar:
-            return 'achou'
         
-        if nodeAtual.filhos != []:
-            fila.append(nodeAtual.filhos)
-
-    return 0 #nao achou
-
-def procuraDFS(raiz: nodeState, nodeProcurar: nodeState):
-    pilha = [] #pilha de nodes
-    
-    pilha.append(raiz)
-    
-    #percorre até acabar
-    while pilha != []:
-        print(f'pilha: {pilha}\n')
-        nodeAtual = copy.deepcopy(pilha.pop())
-        print(f'nodeAtual: {nodeAtual}\n')
-
-        if nodeAtual == nodeProcurar:
-            return 'achou'
         
-        print(nodeAtual.filhos)
-        if nodeAtual.filhos != []:
-            pilha.append(nodeAtual.filhos)
-
-    return 0 #nao achou
-"""
 
 
 def gerar_filhos(nodePai: nodeState):
@@ -140,30 +98,25 @@ def gerar_filhos(nodePai: nodeState):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def printanode(X: nodeState):
+    for i in range(9):
+        if X.matriz[i] == 0:
+            X.matriz[i] = ' '
+    
+    print(f'matriz: ', end='')
+    for i in range(3):
+        print(f'{X.matriz[i]}, ', end='')
+    print(f'   nivel: {X.nivel},   movimento: {X.movimento}\n        ', end='')
+    for i in range(3, 6):
+        print(f'{X.matriz[i]}, ', end='')
+    print(f'\n        ', end='')
+    for i in range(6, 9):
+        print(f'{X.matriz[i]}, ', end='')
+    print(f'\n')
+          
+    for i in range(9):
+        if X.matriz[i] == ' ':
+            X.matriz[i] = 0
 
 
 
@@ -179,40 +132,52 @@ def BFS(raiz: nodeState, objetivo):
     FECHADOS = []
 
     while ABERTOS != []:
-        X = ABERTOS.pop() #() = ultimo
+        X = ABERTOS.pop(0) #(0) = primeiro
+        
+        printanode(X)
         
         if X.matriz == objetivo:
             return 'SUCESSO'
         else:
-            ListaFilhos = gerar_filhos(X)
-            FECHADOS.append(X)
-            
-            for node in ListaFilhos:
-                if node in ABERTOS or node in FECHADOS:
-                    ListaFilhos.remove(node) #evita ciclos ou loops
-                    
-            ABERTOS.append(ListaFilhos) #empilhar os estados na pilha
+            if X.nivel <= 10:
+                ListaFilhos = gerar_filhos(X)
+                FECHADOS.append(X)
+                
+                for node in ListaFilhos:
+                    if node in ABERTOS or node in FECHADOS:
+                        ListaFilhos.remove(node) #evita ciclos ou loops
+                        
+                for node in ListaFilhos:
+                    ABERTOS.append(node) #enfileirar os estados na Fila
+            else:
+                break
     return 'FALHA' #não restam mais estados
 
 
 def DFS(raiz: nodeState, objetivo):
-    ABERTOS = [raiz] #é uma fila
+    ABERTOS = [raiz] #é uma pilha
     FECHADOS = []
     
     while ABERTOS != []:
-        X = ABERTOS.pop(0) #0 = primeiro
+        X = ABERTOS.pop() #() = ultimo
+        
+        printanode(X)
         
         if X.matriz == objetivo:
             return 'SUCESSO'
         else:
-            ListaFilhos = gerar_filhos(X)
-            FECHADOS.append(X)
-            
-            for node in ListaFilhos:
-                if node in ABERTOS or node in FECHADOS:
-                    ListaFilhos.remove(node) #evita ciclos ou loops
-            
-            ABERTOS.append(ListaFilhos) #enfileirar os estados na Fila
+            if X.nivel <= 10:
+                ListaFilhos = gerar_filhos(X)
+                FECHADOS.append(X)
+                
+                for node in ListaFilhos:
+                    if node in ABERTOS or node in FECHADOS:
+                        ListaFilhos.remove(node) #evita ciclos ou loops
+                
+                for node in ListaFilhos:
+                    ABERTOS.append(node) #enfileirar os estados na Fila
+            else:
+                break
     return 'FALHA' #não restam mais estados
 
 
@@ -220,62 +185,15 @@ def DFS(raiz: nodeState, objetivo):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-"""
-def algoritmoDFS(raiz: nodeState, objetivo = nodeState):
-    pilha = []
-    nodeAtual = copy.deepcopy(raiz)
-
-    while procuraDFS(nodeAtual, objetivo) == 0:
-        gerar_filhos(nodeAtual, raiz)
-        pilha.append(nodeAtual.filhos)
-        nodeAtual = pilha.pop() #() = ultimo valor colocado, portanto pilha
-        
-    print(f'\nachei! node: {nodeAtual.matriz}')
-
-
-
-def algoritmoBFS(raiz: nodeState, objetivo = nodeState):
-    fila = []
-    nodeAtual = copy.deepcopy(raiz)
-
-    while procuraBFS(nodeAtual, objetivo) == 0:
-        gerar_filhos(nodeAtual, raiz)
-        fila.append(nodeAtual.filhos)
-        nodeAtual = fila.pop(0) #(0) = primeiro valor colocado, portanto fila
-        
-    print(f'\nachei! node: {nodeAtual.matriz}')
-""" 
-    
-    
     
 
 if __name__ == "__main__":
     #0 = vazio
-    raiz = nodeState([1, 2, 4, 3, 0, 5, 6, 7, 8])
+    raiz = nodeState([1, 2, 3, 4, 5, 6, 7, 0, 8])
     matrizObjetivo = [1, 2, 3, 4, 5, 6, 7, 8, 0]
     
-    match escolhaProcura:
+    match 'bfs':
         case 'bfs':
-            BFS(raiz, matrizObjetivo)
+            print(BFS(raiz, matrizObjetivo))
         case 'dfs':
-            DFS(raiz, matrizObjetivo)
+            print(DFS(raiz, matrizObjetivo))
